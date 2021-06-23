@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ExecutorService;
@@ -27,6 +29,15 @@ public class TimeWidget extends EditorBasedWidget implements CustomStatusBarWidg
 
     protected TimeWidget(@NotNull Project project) {
         super(project);
+        timerLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (isRest) {
+                    stopRest();
+                } else {
+                    startRest();
+                }
+            }
+        });
     }
 
     @Override
