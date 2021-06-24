@@ -4,7 +4,7 @@
     <vendor email="242371@niuitmo.ru" url="https://github.com/KulEDmitr">KED</vendor>
 
     <description><![CDATA[
-    Something will be there..................<br>
+    Time detector will help you to check time when you are working, or have a rest<br>
     ]]></description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
@@ -13,7 +13,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="devtools.plugin.timeDetector.configuration.widget.TimeInitializeStartupActivity"/>
-        <!-- Add your extensions here -->
     </extensions>
 
     <actions>
