@@ -1,7 +1,7 @@
 name: Add Reviewers to pull request
 on:
   pull_request:
-    types: [ready_for_review]
+    branches: master
     
 jobs:
   auto-attach-reviewers:
@@ -12,5 +12,5 @@ jobs:
         uses: madrapps/add-reviewers@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: ic3cr3amsandwitch
+          reviewers: ic3cr3amsandwitch,KulEDmitr
           re-request-when-changes-requested: true
