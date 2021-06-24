@@ -46,111 +46,12 @@ jobs:
       - name: Verify Plugin
         run: chmod +x ./gradlew && ./gradlew verifyPlugin
 
-  # Build plugin with buildPlugin Gradle task and provide the artifact for the next workflow jobs
-  build:
-    name: Build
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      name: ${{ steps.properties.outputs.name }}
-      version: ${{ steps.properties.outputs.version }}
-      changelog: ${{ steps.properties.outputs.changelog }}
-      artifact: ${{ steps.properties.outputs.artifact }}
-    steps:
-      - name: Setup Java
-        run: sudo apt-get install openjdk-11-jdk
-
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
-
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          
-      - name: Give permission
-        run: chmod +x ./gradlew
-
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          VERSION="$(echo "$PROPERTIES" | grep "^pluginVersion:" | cut -f2- -d ' ')"
-          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
-          ARTIFACT="${NAME}-${VERSION}.zip"
-          echo "::set-output name=version::$VERSION"
-          echo "::set-output name=name::$NAME"
-          echo "::set-output name=artifact::$ARTIFACT"
-    
-      - name: Build Plugin
-        run: chmod +x ./gradlew && ./gradlew buildPlugin
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2.2.3
-        with:
-          name: plugin-artifact
-          path: ./build/distributions/${{ steps.properties.outputs.artifact }}
-
-  verify:
-    name: Verify
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Setup Java
-        run: sudo apt-get install openjdk-11-jdk
-
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
-
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          
-      - name: Give permission
-        run: chmod +x ./gradlew
-
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
-          echo "::set-output name=ideVersions::$IDE_VERSIONS"
-          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
-          
-      - name: Setup Plugin Verifier IDEs Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
-          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
-
-      - name: Verify Plugin
-        run: chmod +x ./gradlew && ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
-
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
   releaseDraft:
     name: Release Draft
     if: ${{ github.ref == 'refs/heads/master' }}
-    needs: [build, verify]
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
