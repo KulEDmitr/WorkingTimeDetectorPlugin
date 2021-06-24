@@ -22,6 +22,7 @@
                 text="WorkingTimeDetectorPlugin"
                 description="This action will open info panel for time detection plugin">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" second-keystroke="ctrl P"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>
