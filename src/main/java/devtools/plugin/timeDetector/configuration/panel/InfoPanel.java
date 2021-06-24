@@ -1,32 +1,30 @@
 package devtools.plugin.timeDetector.configuration.panel;
 
-import com.intellij.ui.JBColor;
 import devtools.plugin.timeDetector.configuration.widget.TimeWidget;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class InfoPanel extends JFrame {
+    private JButton start;
+    private JButton stop;
+    private JLabel timeInWork;
+    private JLabel timeInRest;
+    private JPanel infoPanel;
 
     public InfoPanel() {
-        super("Detected Time Information");
+        super("Working Time Detector");
+        setParameters();
+        getContentPane().add(infoPanel);
+        setPreferredSize(new Dimension(700, 200));
+        pack();
+        setVisible(true);
+    }
 
-        JButton start = new JButton("Start");
-        start.setBackground(JBColor.CYAN);
+    public void setParameters() {
         start.addActionListener(e -> TimeWidget.stopRest());
-
-        JButton stop = new JButton("Stop");
-        stop.setBackground(JBColor.PINK);
         stop.addActionListener(e -> TimeWidget.startRest());
-
-        JLabel timeInWork = new JLabel(String.format("time spend in work: %s", TimeWidget.getWorkTime()));
-        JLabel timeInRest = new JLabel(String.format("time spend for rest: %s", TimeWidget.getRestTime()));
-
-        Container container = this.getContentPane();
-        container.setLayout(new GridLayout(2, 3, 2, 2));
-        container.add(timeInWork);
-        container.add(stop);
-        container.add(timeInRest);
-        container.add(start);
+        timeInWork.setText(String.format("time spend in work: %s", TimeWidget.getWorkTime()));
+        timeInRest.setText(String.format("time spend for rest: %s", TimeWidget.getRestTime()));
     }
 }
