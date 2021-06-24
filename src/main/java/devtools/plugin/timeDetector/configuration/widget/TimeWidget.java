@@ -25,6 +25,7 @@ public class TimeWidget extends EditorBasedWidget implements CustomStatusBarWidg
 
     private final ExecutorService service = Executors.newSingleThreadExecutor();
     private static long restTime = 0L;
+    private static long timeForRest = 20L;
 
     private static boolean isRest = false;
     private static LocalTime restStartTime = LocalTime.now();
@@ -65,7 +66,7 @@ public class TimeWidget extends EditorBasedWidget implements CustomStatusBarWidg
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 if (!isRest) {
-                    if (restEndTime.until(LocalTime.now(), ChronoUnit.HOURS) > 4L) {
+                    if (restEndTime.until(LocalTime.now(), ChronoUnit.HOURS) > timeForRest) {
                         if (lastInfo == 600) {
                             lastInfo = 0;
                             getInfoMessage(statusBar);
