@@ -10,12 +10,18 @@
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="devtools.plugin.timeDetector.configuration.widget.TimeInitializeStartupActivity"/>
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="devtools.plugin.timeDetector.configuration.panel.StartPanelAction"
+                class="devtools.plugin.timeDetector.configuration.panel.StartPanelAction"
+                text="WorkingTimeDetectorPlugin"
+                description="This action will open info panel for time detection plugin">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" second-keystroke="ctrl P"/>
+        </action>
     </actions>
 </idea-plugin>
