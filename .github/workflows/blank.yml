@@ -1,4 +1,4 @@
-name: Add Reviewers to pull request
+name: Add-Reviewers-to-pull-request
 on:
   pull_request:
     branches: master
