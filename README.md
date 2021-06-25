@@ -1,5 +1,7 @@
 
 # WorkingTimeDetectorPlugin
+Status of last deployment:<br>
+<img src="https://github.com/KulEDmitr/WorkingTimeDetectorPlugin/Add-Reviewers-to-pull-request/badge.svg?branch=master"><br>
 ![image](https://user-images.githubusercontent.com/37519644/123351153-360a7400-d565-11eb-986a-199541954ba1.png)
 
 ***
